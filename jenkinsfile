@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    triggers {
+        pollSCM('H/2 * * * *')
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building application'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'test -s index.html'
+                echo 'Website test successful'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'cp index.html /var/www/html/index.html'
+                echo 'Deployment successful'
+            }
+        }
+    }
+}
